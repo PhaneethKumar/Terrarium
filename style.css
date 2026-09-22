@@ -60,6 +60,20 @@ p {
     height: 100%;
     object-fit: fill;
     z-index: 2;
+    transform-origin: bottom center;
+    animation: plant-sway 3s ease-in-out infinite;
+}
+
+@keyframes plant-sway {
+
+    0%,
+    100% {
+        transform: rotate(-3deg);
+    }
+
+    50% {
+        transform: rotate(3deg);
+    }
 }
 
 #plant-care-guide {
