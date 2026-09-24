@@ -53,12 +53,19 @@ p {
 }
 
 .plant {
+    position: relative;
     width: 100%;
     height: 100%;
     object-fit: fill;
     z-index: 2;
+    touch-action: none;
+    cursor: grab;
     transform-origin: bottom center;
     animation: plant-sway 3s ease-in-out infinite;
+}
+
+.plant:active {
+    cursor: grabbing;
 }
 
 @keyframes plant-sway {
