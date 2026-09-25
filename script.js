@@ -27,12 +27,14 @@ function dragElement(terrariumElement) {
 
         const plantRect = terrariumElement.getBoundingClientRect();
         const areaRect = dragArea.getBoundingClientRect();
+        const layoutWidth = terrariumElement.offsetWidth;
+        const layoutHeight = terrariumElement.offsetHeight;
         offsetX = e.clientX - plantRect.left;
         offsetY = e.clientY - plantRect.top;
 
         terrariumElement.style.position = 'absolute';
-        terrariumElement.style.width = `${plantRect.width}px`;
-        terrariumElement.style.height = `${plantRect.height}px`;
+        terrariumElement.style.width = `${layoutWidth}px`;
+        terrariumElement.style.height = `${layoutHeight}px`;
         terrariumElement.style.left = `${plantRect.left - areaRect.left}px`;
         terrariumElement.style.top = `${plantRect.top - areaRect.top}px`;
         terrariumElement.style.zIndex = '3';
