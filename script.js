@@ -15,49 +15,41 @@ dragElement(document.getElementById('plant13'));
 dragElement(document.getElementById('plant14'));
 
 function dragElement(terrariumElement) {
-    // Initialize position tracking variables
-    let pos1 = 0,  // Previous mouse X position
-        pos2 = 0,  // Previous mouse Y position  
-        pos3 = 0,  // Current mouse X position
-        pos4 = 0;  // Current mouse Y position
+    let offsetX = 0;
+    let offsetY = 0;
+    const dragArea = document.getElementById('plant-selection');
 
-    // Set up the initial drag event listener
     terrariumElement.onpointerdown = pointerDrag;
 
     function pointerDrag(e) {
-        // Even if you don't explicitly pass variables into an event listener, the browser automatically hands the function an invisible gift: the Event Object (usually written as e or event).
-        // The browser automatically passes all the details of that click into the function. That event object contains a property called e.target (the exact HTML element your mouse just clicked).
-
-        // Prevent default browser behavior which interferes with the drag operation (like text selection)
         e.preventDefault();
+        terrariumElement.setPointerCapture(e.pointerId);
 
-        // Capture the initial mouse/touch position
-        pos3 = e.clientX;  // X coordinate where drag started
-        pos4 = e.clientY;  // Y coordinate where drag started
+        const plantRect = terrariumElement.getBoundingClientRect();
+        const areaRect = dragArea.getBoundingClientRect();
+        offsetX = e.clientX - plantRect.left;
+        offsetY = e.clientY - plantRect.top;
 
-        // Set up event listeners for the dragging process
-        document.onpointermove = elementDrag;
-        document.onpointerup = stopElementDrag;
+        terrariumElement.style.position = 'absolute';
+        terrariumElement.style.width = `${plantRect.width}px`;
+        terrariumElement.style.height = `${plantRect.height}px`;
+        terrariumElement.style.left = `${plantRect.left - areaRect.left}px`;
+        terrariumElement.style.top = `${plantRect.top - areaRect.top}px`;
+        terrariumElement.style.zIndex = '3';
+        terrariumElement.onpointermove = elementDrag;
+        terrariumElement.onpointerup = stopElementDrag;
     }
 
     function elementDrag(e) {
-        // Calculate the distance moved since the last event
-        pos1 = pos3 - e.clientX;  // Horizontal distance moved
-        pos2 = pos4 - e.clientY;  // Vertical distance moved
-
-        // Update the current position tracking
-        pos3 = e.clientX;  // New current X position
-        pos4 = e.clientY;  // New current Y position
-
-        // Apply the movement to the element's position
-        terrariumElement.style.top = (terrariumElement.offsetTop - pos2) + 'px';
-        terrariumElement.style.left = (terrariumElement.offsetLeft - pos1) + 'px';
+        const areaRect = dragArea.getBoundingClientRect();
+        terrariumElement.style.left = `${e.clientX - areaRect.left - offsetX}px`;
+        terrariumElement.style.top = `${e.clientY - areaRect.top - offsetY}px`;
     }
 
-    function stopElementDrag() {
-        // Remove the document-level event listeners
-        document.onpointerup = null;
-        document.onpointermove = null;
+    function stopElementDrag(e) {
+        terrariumElement.releasePointerCapture(e.pointerId);
+        terrariumElement.onpointermove = null;
+        terrariumElement.onpointerup = null;
     }
 
 }
