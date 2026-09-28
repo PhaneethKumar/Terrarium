@@ -1,57 +1,44 @@
-// Enable drag functionality for all 14 plants
-dragElement(document.getElementById('plant1'));
-dragElement(document.getElementById('plant2'));
-dragElement(document.getElementById('plant3'));
-dragElement(document.getElementById('plant4'));
-dragElement(document.getElementById('plant5'));
-dragElement(document.getElementById('plant6'));
-dragElement(document.getElementById('plant7'));
-dragElement(document.getElementById('plant8'));
-dragElement(document.getElementById('plant9'));
-dragElement(document.getElementById('plant10'));
-dragElement(document.getElementById('plant11'));
-dragElement(document.getElementById('plant12'));
-dragElement(document.getElementById('plant13'));
-dragElement(document.getElementById('plant14'));
+let topZ = 3;
 
-function dragElement(terrariumElement) {
-    let offsetX = 0;
-    let offsetY = 0;
+document.querySelectorAll('.plant').forEach(dragElement);
+
+function dragElement(el) {
     const dragArea = document.getElementById('plant-selection');
+    let offsetX = 0, offsetY = 0;
 
-    terrariumElement.onpointerdown = pointerDrag;
-
-    function pointerDrag(e) {
+    el.addEventListener('pointerdown', (e) => {
         e.preventDefault();
-        terrariumElement.setPointerCapture(e.pointerId);
+        el.setPointerCapture(e.pointerId);
 
-        const plantRect = terrariumElement.getBoundingClientRect();
+        const plantRect = el.getBoundingClientRect();
         const areaRect = dragArea.getBoundingClientRect();
-        const layoutWidth = terrariumElement.offsetWidth;
-        const layoutHeight = terrariumElement.offsetHeight;
         offsetX = e.clientX - plantRect.left;
         offsetY = e.clientY - plantRect.top;
 
-        terrariumElement.style.position = 'absolute';
-        terrariumElement.style.width = `${layoutWidth}px`;
-        terrariumElement.style.height = `${layoutHeight}px`;
-        terrariumElement.style.left = `${plantRect.left - areaRect.left}px`;
-        terrariumElement.style.top = `${plantRect.top - areaRect.top}px`;
-        terrariumElement.style.zIndex = '3';
-        terrariumElement.onpointermove = elementDrag;
-        terrariumElement.onpointerup = stopElementDrag;
-    }
+        Object.assign(el.style, {
+            position: 'absolute',
+            width: `${el.offsetWidth}px`,
+            height: `${el.offsetHeight}px`,
+            left: `${plantRect.left - areaRect.left}px`,
+            top: `${plantRect.top - areaRect.top}px`,
+            zIndex: ++topZ,
+        });
+    });
 
-    function elementDrag(e) {
+    el.addEventListener('pointermove', (e) => {
+        if (!el.hasPointerCapture(e.pointerId)) return;
         const areaRect = dragArea.getBoundingClientRect();
-        terrariumElement.style.left = `${e.clientX - areaRect.left - offsetX}px`;
-        terrariumElement.style.top = `${e.clientY - areaRect.top - offsetY}px`;
-    }
+        const maxX = areaRect.width - el.offsetWidth;
+        const maxY = areaRect.height - el.offsetHeight;
+        const x = e.clientX - areaRect.left - offsetX;
+        const y = e.clientY - areaRect.top - offsetY;
+        el.style.left = `${Math.min(Math.max(0, x), maxX)}px`;
+        el.style.top = `${Math.min(Math.max(0, y), maxY)}px`;
+    });
 
-    function stopElementDrag(e) {
-        terrariumElement.releasePointerCapture(e.pointerId);
-        terrariumElement.onpointermove = null;
-        terrariumElement.onpointerup = null;
-    }
-
+    const stop = (e) => {
+        if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+    };
+    el.addEventListener('pointerup', stop);
+    el.addEventListener('pointercancel', stop);
 }
