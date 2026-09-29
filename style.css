@@ -27,6 +27,47 @@ p {
     text-align: center;
 }
 
+.toolbar {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0 1rem;
+}
+
+#reset-btn {
+    background: #2d7c6f;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+#reset-btn .fas {
+    color: #fff;
+}
+
+#reset-btn:hover:not(:disabled),
+#reset-btn:focus-visible {
+    background: #3a241d;
+}
+
+#reset-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* Applied by JS only while plants are gliding home */
+.plant.returning {
+    transition: left 1s ease-in-out, top 1s ease-in-out,
+        width 1s ease-in-out, height 1s ease-in-out;
+}
+
 #plant-selection {
     position: relative;
     display: grid;
