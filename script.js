@@ -1,5 +1,3 @@
-let topZ = 3;
-
 const dragArea = document.getElementById('plant-selection');
 const resetBtn = document.getElementById('reset-btn');
 const plants = document.querySelectorAll('.plant');
@@ -22,11 +20,73 @@ function storeHomePositions() {
     });
 }
 
+const STORAGE_KEY = 'plantLayout';
+
+function saveLayout() {
+    const layout = {};
+    plants.forEach((el) => {
+        if (el.style.position !== 'absolute') return;
+        const cs = getComputedStyle(el);
+        layout[el.id] = {
+            left: parseFloat(cs.left) || 0,
+            top: parseFloat(cs.top) || 0,
+            width: parseFloat(cs.width) || 0,
+            height: parseFloat(cs.height) || 0,
+            zIndex: parseInt(cs.zIndex) || 0,
+        };
+    });
+
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(layout));
+    } catch (e) {
+        console.error('Failed to save layout:', e);
+    }
+}
+
+function restoreLayout() {
+    let layout = {};
+    try {
+        layout = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    } catch (e) {
+        console.error('Failed to restore layout:', e);
+        return;
+    }
+
+    if (Object.keys(layout).length > 0) {
+        plants.forEach((el) => {
+            const pos = layout[el.id];
+            if (pos) {
+                Object.assign(el.style, {
+                    position: 'absolute',
+                    left: `${pos.left}px`,
+                    top: `${pos.top}px`,
+                    width: `${pos.width}px`,
+                    height: `${pos.height}px`,
+                    zIndex: pos.zIndex,
+                });
+            }
+        });
+    }
+}
+
+function clearSavedLayout() {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+        console.error('Failed to clear saved layout:', e);
+    }
+}
+
 // Store on load, and refresh on resize so the layout stays correct
-window.addEventListener('load', storeHomePositions);
+window.addEventListener('load', () => {
+    storeHomePositions();
+    restoreLayout();
+});
 window.addEventListener('resize', storeHomePositions);
 
 plants.forEach(dragElement);
+
+let topZ = 3;
 
 function bringToFront(el) {
     el.style.zIndex = ++topZ;
@@ -92,15 +152,20 @@ function dragElement(el) {
 
     const stop = (e) => {
         if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+        saveLayout();
     };
     el.addEventListener('pointerup', stop);
     el.addEventListener('pointercancel', stop);
-    el.addEventListener('dblclick', () => bringToFront(el));
+    el.addEventListener('dblclick', () => {
+        bringToFront(el);
+        saveLayout();
+    });
 }
 
 function resetPlants() {
-    let moved = 0;
+    clearSavedLayout();
 
+    let moved = 0;
     plants.forEach((el) => {
         // Only plants that were dragged have inline absolute positioning
         if (el.style.position !== 'absolute') return;
