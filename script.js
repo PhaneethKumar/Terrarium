@@ -28,6 +28,10 @@ window.addEventListener('resize', storeHomePositions);
 
 plants.forEach(dragElement);
 
+function bringToFront(el) {
+    el.style.zIndex = ++topZ;
+}
+
 function dragElement(el) {
     let offsetX = 0, offsetY = 0;
 
@@ -91,6 +95,7 @@ function dragElement(el) {
     };
     el.addEventListener('pointerup', stop);
     el.addEventListener('pointercancel', stop);
+    el.addEventListener('dblclick', () => bringToFront(el));
 }
 
 function resetPlants() {

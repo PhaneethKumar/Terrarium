@@ -104,6 +104,14 @@ p {
     cursor: grab;
     transform-origin: bottom center;
     animation: plant-sway 3s ease-in-out infinite;
+    transition: filter 0.25s ease;
+}
+
+/* Subtle glow on hover, only on devices that actually hover */
+@media (hover: hover) {
+    .plant:hover {
+        filter: drop-shadow(0 0 6px rgba(45, 124, 111, 0.65));
+    }
 }
 
 .plant:active {
