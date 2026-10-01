@@ -2,6 +2,48 @@ const dragArea = document.getElementById('plant-selection');
 const resetBtn = document.getElementById('reset-btn');
 const plants = document.querySelectorAll('.plant');
 
+let audioCtx = null;
+let soundEnabled = true;
+
+function getAudioCtx() {
+    if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        audioCtx = new AC();
+    }
+    // Browsers start the context suspended until a user gesture
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+}
+
+function playTone({ from, to, duration, type = 'sine', volume = 0.15 }) {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(from, now);
+    osc.frequency.exponentialRampToValueAtTime(to, now + duration);
+
+    // Quick fade in/out avoids clicks
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(volume, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+}
+
+// Rising "blip" when lifting a plant
+const playPickup = () => playTone({ from: 380, to: 620, duration: 0.12 });
+// Soft falling "thud" when setting it down
+const playPlace = () => playTone({ from: 260, to: 140, duration: 0.16, type: 'triangle', volume: 0.2 });
+
 // Original position/size of each plant, relative to #plant-selection
 const homePositions = new Map();
 
@@ -96,6 +138,7 @@ function dragElement(el) {
     let offsetX = 0, offsetY = 0;
 
     el.addEventListener('pointerdown', (e) => {
+        playPickup();
         e.preventDefault();
         el.setPointerCapture(e.pointerId);
 
@@ -151,7 +194,10 @@ function dragElement(el) {
     });
 
     const stop = (e) => {
-        if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+        if (el.hasPointerCapture(e.pointerId)) {
+            el.releasePointerCapture(e.pointerId);
+            playPlace();
+        }
         saveLayout();
     };
     el.addEventListener('pointerup', stop);
