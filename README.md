@@ -2,6 +2,10 @@
 
 A small interactive web project built as part of the Microsoft Developer Advocate intro to web development course. This terrarium showcases the fundamentals of HTML, CSS, and JavaScript by combining a responsive layout with drag-and-drop plant placement, sound effects, and a polished garden-themed UI.
 
+## Live Demo
+
+[Welcome to my Virtual Terrarium](https://terrarium-khaki.vercel.app/)
+
 ## Overview
 
 This project is a virtual terrarium where you can arrange different plants inside a glass container. The plants can be dragged around the scene, layered visually, and reset to their original positions. The app also includes subtle audio cues and a clean, modern style inspired by a cozy indoor garden.
