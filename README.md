@@ -1,10 +1,10 @@
 # My Terrarium
 
-A small interactive web project built as part of the Microsoft Developer Advocate intro to web development course. This terrarium showcases the fundamentals of HTML, CSS, and JavaScript by combining a responsive layout with drag-and-drop plant placement, sound effects, and a polished garden-themed UI.
+A small interactive web page built as part of the Microsoft Developer Advocate's Intro to Web Development course. This terrarium showcases the fundamentals of HTML, CSS, and JavaScript by combining a responsive layout with drag-and-drop plant placement, sound effects, and a polished garden-themed UI.
 
 ## Live Demo
 
-[Welcome to my Virtual Terrarium](https://terrarium-khaki.vercel.app/)
+[Welcome to my Virtual Terrarium](https://phaneethkumar.github.io/Terrarium/)
 
 ## Overview
 
@@ -17,7 +17,6 @@ This project is a virtual terrarium where you can arrange different plants insid
 - Reset button to restore the original arrangement
 - Animated plant movement and hover effects
 - Simple sound interactions for plant pickup and placement
-- A plant care guide section for a more complete themed experience
 
 ## Tech Stack
 
@@ -35,11 +34,11 @@ Terrarium/
 ├── script.js
 ├── README.md
 ├── images/
-│   ├── plant1.png
-│   ├── plant2.png
-│   ├── ...
-│   └── plant14.png
-└── .gitignore
+    ├── plant1.png
+    ├── plant2.png
+    ├── ...
+    └── plant14.png
+
 ```
 
 ## Getting Started
@@ -71,26 +70,21 @@ Terrarium/
 
 The page is structured with:
 
-- a navigation bar and header for the terrarium theme
-- a central container where plants can be moved around
-- a styled glass jar and soil base to give the scene its terrarium appearance
-- JavaScript logic that handles dragging, z-index layering, layout persistence, and reset behavior
+- A navigation bar and header for the terrarium theme
+- A central container where plants can be moved around
+- A styled glass jar and soil base to give the scene its terrarium appearance
+- JavaScript logic that handles dragging, z-index layering, layout persistence, sound effects and reset behavior
 
 ## Learning Notes
 
 This project was a practical introduction to:
 
-- structuring web pages with semantic HTML
-- styling with CSS layout techniques and responsive design
-- adding interactivity with JavaScript events and pointer tracking
-- working with local storage to persist custom plant layouts
-- creating a small, polished front-end experience from scratch
+- Structuring web pages with semantic HTML
+- Styling with CSS layout techniques and responsive design
+- Adding interactivity with JavaScript events and pointer tracking
+- Working with local storage to persist custom plant layouts
+- Creating a small, polished front-end experience from scratch
 
 ## Credits
 
-This project was created as part of a beginner-friendly web development learning path and serves as a hands-on exercise in building an interactive front-end application.
-
-## License
-
-This project is for educational purposes and is intended as a learning exercise.
-
+Assignment from [Web Development for Beginners](https://github.com/microsoft/Web-Dev-For-Beginners) by Microsoft. All code and content in this repository are my own work.
