@@ -29,6 +29,7 @@ This project is a virtual terrarium where you can arrange different plants insid
 
 ```text
 Terrarium/
+├── .github/workflows/   # GitHub Actions workflow(s)
 ├── index.html
 ├── style.css
 ├── script.js
